@@ -1,6 +1,4 @@
-#!/bin/crystal run
 require "file"
-require "spec"
 
 def collect_path(map, key, end_point = "COM")
   key = key.clone
@@ -43,14 +41,3 @@ end
 input = File.read_lines("input.txt")
 puts run input
 puts run2 input
-# puts run tape, 1
-# puts run tape, 5
-
-describe "tests" do
-  it "works" do
-    collect_path({"YOU" => "K", "K" => "J", "J" => "E", "E" => "D"}, "YOU", "D").size.should eq 4
-  end
-  it "works" do
-    collect_path({"SAN" => "I", "I" => "D"}, "SAN", "D").size.should eq 2
-  end
-end
