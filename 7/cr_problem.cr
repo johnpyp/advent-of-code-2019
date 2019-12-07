@@ -24,8 +24,8 @@ class IC
       when  4 then @p += 2; return @t[x]
       when  5 then @t[x] != 0 ? (@p = @t[y]) : (@p += 3)
       when  6 then @t[x] == 0 ? (@p = @t[y]) : (@p += 3)
-      when  7 then @t[@t[@p + 3]] = @t[x] < @t[y] ? 1 : 0; @p += 4
-      when  8 then @t[@t[@p + 3]] = @t[x] == @t[y] ? 1 : 0; @p += 4
+      when  7 then @t[z] = @t[x] < @t[y] ? 1 : 0; @p += 4
+      when  8 then @t[z] = @t[x] == @t[y] ? 1 : 0; @p += 4
       when 99 then return nil
       else         raise "Unexpected path: #{op}, at pos #{p}, cur #{cur}"
       end
@@ -54,9 +54,9 @@ puts (5..9).to_a.permutations.max_of { |perm|
   map = {} of Int32 => IC
   prev = 0
   loop {
-    res = val
+    res = prev
     perm.each { |setting|
-      input = map.has_key?(setting) ? [val] : [val, setting]
+      input = map.has_key?(setting) ? [prev] : [prev, setting]
       map[setting] ||= IC.new t
       prev = map[setting].run input
       break if !prev
