@@ -22,7 +22,7 @@ def parse_line(s)
             when 'D' then Point.new 0, -1
             when 'R' then Point.new 1, 0
             when 'L' then Point.new -1, 0
-            else          Point.new 0, 0
+            else          raise "Bad op: #{op}"
             end
     amount.times {
       pos += delta

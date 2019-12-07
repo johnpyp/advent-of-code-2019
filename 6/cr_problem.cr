@@ -1,3 +1,4 @@
+#!/bin/crystal
 require "file"
 
 def collect_path(map, key, end_point = "COM")
