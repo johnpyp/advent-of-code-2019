@@ -33,42 +33,34 @@ class IC
   end
 end
 
-def run(tape)
-  t = tape.split(',').map &.to_i
-  (0..4).to_a.permutations.max_of { |perm|
-    prev = 0
-    perm.each { |setting|
-      input = [prev, setting]
-      ic = IC.new t
-      prev = ic.run(input) || break
-    }
-    prev
-  }
-end
-
-def run2(tape)
-  t = tape.split(',').map &.to_i
-  (5..9).to_a.permutations.max_of { |perm|
-    map = {} of Int32 => IC
-    val = 0
-    loop {
-      res = val
-      perm.each { |setting|
-        input = map.has_key?(setting) ? [val] : [val, setting]
-        map[setting] ||= IC.new t
-        val = map[setting].run input
-        break if !val
-      }
-      break res if !val
-    }
-  }
-end
-
 input = File.read_lines("input.txt")
 
 tape = input[0]
-puts run tape
-puts run2 tape
+t = tape.split(',').map &.to_i
 
-describe "tests" do
-end
+# part 1
+puts (0..4).to_a.permutations.max_of { |perm|
+  prev = 0
+  perm.each { |setting|
+    input = [prev, setting]
+    ic = IC.new t
+    prev = ic.run(input) || break
+  }
+  prev
+}
+
+# part 2
+puts (5..9).to_a.permutations.max_of { |perm|
+  map = {} of Int32 => IC
+  prev = 0
+  loop {
+    res = val
+    perm.each { |setting|
+      input = map.has_key?(setting) ? [val] : [val, setting]
+      map[setting] ||= IC.new t
+      prev = map[setting].run input
+      break if !prev
+    }
+    break res if !prev
+  }
+}
