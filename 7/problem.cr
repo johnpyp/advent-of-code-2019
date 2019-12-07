@@ -1,6 +1,4 @@
-#!/bin/crystal
 require "file"
-require "spec"
 
 class IC
   def initialize(tape : Array(Int32))

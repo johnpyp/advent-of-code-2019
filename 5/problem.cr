@@ -1,6 +1,4 @@
-#!/bin/crystal run
 require "file"
-require "spec"
 
 def run(tape, i = 0)
   t = tape.clone
