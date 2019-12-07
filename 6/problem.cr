@@ -31,4 +31,4 @@ you_path = collect_path map, "YOU"
 
 shared = (san_path & you_path)[0]
 
-puts san_path.index(shared).as(Int32) + you_path.index(shared).as(Int32)
+puts san_path.index(shared).not_nil! + you_path.index(shared).not_nil!

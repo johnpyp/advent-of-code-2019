@@ -41,4 +41,4 @@ intersect_points = (points1 & points2).select { |x| x != Point.new }
 puts intersect_points.min_of &.man_distance
 
 # part 2
-puts intersect_points.min_of { |p| points1.index(p).as(Int32) + points2.index(p).as(Int32) }
+puts intersect_points.min_of { |p| points1.index(p).not_nil! + points2.index(p).not_nil! }
