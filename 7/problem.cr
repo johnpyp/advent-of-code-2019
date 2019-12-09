@@ -6,7 +6,7 @@ class IC
     @p = 0
   end
 
-  def run(input : Array(Int32))
+  def run(input)
     i = input
     loop {
       cur = @t[@p]

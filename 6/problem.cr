@@ -16,13 +16,13 @@ def collect_path(map, key, end_point = "COM")
 end
 
 input = File.read_lines("input.txt")
-map = input.each_with_object({} of String => String) { |x, map|
+map = input.each_with_object({} of String => String) { |x, obj|
   a, b = x.split(')')
-  map[b] = a
+  obj[b] = a
 }
 # part 1
 puts map.reduce(0) { |acc, x|
-  k, v = x
+  k, _ = x
   acc + collect_path(map, k).size
 }
 # part 2

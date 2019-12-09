@@ -17,6 +17,6 @@ tallied = (s..e)
   .map { |str| str.chars.tally.values.reject(1) }
 
 # part 1
-puts tallied.select { |a| a.size > 0 }.size
+puts tallied.count { |a| a.size > 0 }
 # part 2
-puts tallied.select { |a| a.includes? 2 }.size
+puts tallied.count { |a| a.includes? 2 }
