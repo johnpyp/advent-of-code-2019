@@ -46,7 +46,7 @@ end
 def run1(i)
   points = input_to_points i
 
-  puts points.map { |p1|
+  points.map { |p1|
     {points
       .map { |p2| PPair.new p1, p2 }
       .uniq(&.slope)
@@ -70,10 +70,10 @@ def run2(i, laser_point)
     points -= laser_order
   end
 
-  puts final_order[199]
+  final_order[199]
 end
 
 input = File.read_lines("input.txt")
 
-run1 input
-run2 input, Point.new(17, 22)
+puts run1 input
+puts run2 input, Point.new(17, 22)
