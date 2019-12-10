@@ -3,8 +3,12 @@ require "file"
 class IC
   @t : Hash(Int64, Int64)
 
-  def initialize(tape : Array(Int64))
-    @t = tape.map_with_index { |x, i| {i.to_i64, x} }.to_h
+  def initialize(tape : (Array(Int64) | String))
+    @t = case tape
+         when Array(Int64) then tape.map_with_index { |x, i| {i.to_i64, x} }.to_h
+         when String       then tape.split(',').map_with_index { |x, i| {i.to_i64, x.to_i64} }.to_h
+         else                   raise "Bad tape input"
+         end
     @p = 0_i64
     @rb = 0_i64
   end
@@ -48,13 +52,16 @@ class IC
       end
     }
   end
+
+  def self.run(t, input : Array(Int64))
+    ic = IC.new t
+    ic.run input
+  end
 end
 
 input = File.read_lines("input.txt")
-t = input[0].split(',').map &.to_i64
+t = input[0]
 # part 1
-ic = IC.new t
-puts ic.run([1_i64])
+puts IC.run t, [1_i64]
 # part 2
-ic = IC.new t
-puts ic.run([2_i64])
+puts IC.run t, [2_i64]
