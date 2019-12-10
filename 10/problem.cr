@@ -16,7 +16,22 @@ record Point, x : Int32 = 0, y : Int32 = 0 {
   end
 }
 
-def run1(i)
+record PPair, p1 : Point, p2 : Point {
+  def slope
+    s = p1.slope(p2)
+    p2.x < p1.x ? s + 0.000001 : s
+  end
+
+  def dist
+    p1.dist(p2)
+  end
+
+  def ang
+    p1.ang(p2)
+  end
+}
+
+def input_to_points(i)
   points = [] of Point
   i.each_with_index { |row, r|
     row.chars.each_with_index { |char, c|
@@ -25,49 +40,37 @@ def run1(i)
       end
     }
   }
+  points
+end
 
-  can_see = points.map { |point|
-    {points.map { |point2|
-      s = point.slope(point2)
-      if point2.x < point.x
-        s + 0.000001
-      else
-        s
-      end
-    }.uniq.size - 1, point}
-  }
+def run1(i)
+  points = input_to_points i
 
-  puts can_see.max_by { |p| p[0] }
+  puts points.map { |p1|
+    {points
+      .map { |p2| PPair.new p1, p2 }
+      .uniq(&.slope)
+      .size, p1}
+  }.max_by(&.[0])
 end
 
 def run2(i, laser_point)
-  points = [] of Point
-  i.each_with_index { |row, r|
-    row.chars.each_with_index { |char, c|
-      if char == '#'
-        points << Point.new c, r
-      end
-    }
-  }
+  points = input_to_points i
   points -= [laser_point]
-  dest = [] of Point
+  final_order = [] of Point
 
   while points.size > 0
-    by_dist = points.sort_by { |point|
-      laser_point.dist(point)
-    }
-    visible = by_dist.uniq { |p|
-      s = laser_point.slope(p)
-      laser_point.x < p.x ? s + 0.00001 : s
-    }
-    laser_order = visible.sort_by { |point|
-      laser_point.ang(point)
-    }
-    dest += laser_order
+    laser_order = points
+      .map { |p| PPair.new laser_point, p }
+      .sort_by(&.dist)
+      .uniq(&.slope)
+      .sort_by(&.ang)
+      .map(&.p2)
+    final_order += laser_order
     points -= laser_order
   end
 
-  puts dest[199]
+  puts final_order[199]
 end
 
 input = File.read_lines("input.txt")
