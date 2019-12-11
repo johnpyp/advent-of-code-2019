@@ -114,9 +114,9 @@ puts robot.run.size
 ic = IC.new input[0]
 robot = Robot.new ic, 1_i64
 hm = robot.run
-2d_arr = 20.times.to_a.map { |_| 50.times.to_a.map { |_| 0 } }
+arr_2d = 20.times.to_a.map { |_| 50.times.to_a.map { |_| 0 } }
 white_points = hm.select { |_, v| v == 1 }.keys
 white_points.each { |point|
-  2d_arr[-(point.y + 10)][point.x] = 1
+  arr_2d[-(point.y + 10)][point.x] = 1
 }
-2d_arr.each { |row| puts row.join("").gsub("0", " ") }
+arr_2d.each { |row| puts row.join("").gsub("0", " ") }
