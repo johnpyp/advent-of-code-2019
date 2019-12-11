@@ -75,5 +75,6 @@ end
 
 input = File.read_lines("input.txt")
 
-puts run1 input
-puts run2 input, Point.new(17, 22)
+res1 = run1 input
+puts res1
+puts run2 input, res1[1]

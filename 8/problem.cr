@@ -1,8 +1,10 @@
 require "file"
 
+WIDTH  = 25
+HEIGHT =  6
 input = File.read_lines("input.txt")
 
-layers = input[0].chars.map(&.to_i).each_slice(25*6).to_a
+layers = input[0].chars.map(&.to_i).each_slice(WIDTH*HEIGHT).to_a
 
 # part 1
 least0s = layers.min_by { |layer| layer.count(0) }
@@ -14,7 +16,7 @@ final = layers.each_with_object(layers.first) { |layer, obj|
   }
 }
 
-6.times {
-  puts final[...25].join("").gsub("0", " ")
-  final.delete_at(...25)
+HEIGHT.times {
+  puts final[...WIDTH].join("").gsub("0", " ")
+  final.delete_at(...WIDTH)
 }

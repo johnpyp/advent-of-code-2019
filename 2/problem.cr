@@ -30,6 +30,6 @@ puts run(tape)[0]
 correct = 19690720
 puts 100.times.to_a.permutations(2).find { |x|
   t = base_tape.clone
-  t[1..2] = x
+  t[1], t[2] = x
   run(t)[0] == correct
 }

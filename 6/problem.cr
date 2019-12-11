@@ -6,11 +6,8 @@ def collect_path(map, key, end_point = "COM")
   loop {
     nex = map[key]
     path.push(nex)
-    if nex == end_point
-      break
-    else
-      key = nex
-    end
+    break if nex == end_point
+    key = nex
   }
   path
 end
@@ -21,10 +18,7 @@ map = input.each_with_object({} of String => String) { |x, obj|
   obj[b] = a
 }
 # part 1
-puts map.reduce(0) { |acc, x|
-  k, _ = x
-  acc + collect_path(map, k).size
-}
+puts map.map { |k, _| collect_path(map, k).size }.sum
 # part 2
 san_path = collect_path map, "SAN"
 you_path = collect_path map, "YOU"
