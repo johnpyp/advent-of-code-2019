@@ -1,9 +1,11 @@
 class IC
+  property t
   @t : Hash(Int64, Int64)
 
-  def initialize(tape : (Array(Int64) | String))
+  def initialize(tape : (Array(Int32) | Array(Int64) | String))
     @t = case tape
          when Array(Int64) then tape.map_with_index { |x, i| {i.to_i64, x} }.to_h
+         when Array(Int32) then tape.map_with_index { |x, i| {i.to_i64, x.to_i64} }.to_h
          when String       then tape.split(',').map_with_index { |x, i| {i.to_i64, x.to_i64} }.to_h
          else                   raise "Bad tape input"
          end
@@ -24,8 +26,15 @@ class IC
     end
   end
 
-  def run(input : Array(Int64))
-    i = input
+  def run(input : (Array(Int64) | Int64 | Int32 | Array(Int32) | Nil) = [] of Int64)
+    i = case input
+        when Array(Int64) then input
+        when Array(Int32) then input.map(&.to_i64)
+        when Int64        then [input]
+        when Int32        then [input.to_i64]
+        when nil          then [] of Int64
+        else                   raise "Unexpected input"
+        end
     loop {
       cur = @t[@p]
       op = cur % 100
@@ -50,7 +59,7 @@ class IC
     }
   end
 
-  def self.run(t, input : Array(Int64))
+  def self.run(t, input = nil)
     ic = IC.new t
     ic.run input
   end

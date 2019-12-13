@@ -1,6 +1,8 @@
 require "file"
 require "math"
-require "../intcode/intcode.cr"
+require "../intcode"
+require "../util"
+
 record Point, x : Int32 = 0, y : Int32 = 0 do
   def +(other)
     Point.new x + other.x, y + other.y
@@ -35,8 +37,8 @@ class Robot
 
   def run
     loop {
-      @grid[@p] = @ic.run([get(@p)]) || break
-      o2 = @ic.run [] of Int64 || break
+      @grid[@p] = @ic.run(get(@p)) || break
+      o2 = @ic.run || break
       case o2
       when 0 then @direc = (@direc - 1) % 4
       when 1 then @direc = (@direc + 1) % 4
@@ -57,9 +59,12 @@ puts robot.run.size
 ic = IC.new input[0]
 robot = Robot.new ic, 1_i64
 hm = robot.run
-arr_2d = 20.times.to_a.map { |_| 50.times.to_a.map { |_| 0 } }
-white_points = hm.select { |_, v| v == 1 }.keys
-white_points.each { |point|
-  arr_2d[-(point.y + 10)][point.x] = 1
+
+Util.print_point_map(hm, rcol: true) { |x, y, v|
+  case v
+  when 0   then " "
+  when 1   then "#"
+  when nil then " "
+  else          raise "Unexpected"
+  end
 }
-arr_2d.each { |row| puts row.join("").gsub("0", " ") }

@@ -1,5 +1,4 @@
 require "file"
-
 record Point, x : Int32 = 0, y : Int32 = 0 {
   def man_distance
     x.abs + y.abs
