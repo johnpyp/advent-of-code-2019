@@ -21,9 +21,9 @@ input = File.read("input.txt").strip
 hm = {} of Point => Int64
 ic1 = IC.new input
 loop {
-  x = ic1.run || break
-  y = ic1.run || break
-  tile = ic1.run || break
+  x = ic1.receive || break
+  y = ic1.receive || break
+  tile = ic1.receive || break
   hm[Point.new x, y] = tile
 }
 puts hm.values.count(2)
@@ -50,9 +50,10 @@ loop {
          when ball_pos == paddle_pos then 0
          else                             raise "Unexpected"
          end
-  x = ic2.run(jpos) || break
-  y = ic2.run || break
-  tile = ic2.run || break
+  ic2.send jpos
+  x = ic2.receive || break
+  y = ic2.receive || break
+  tile = ic2.receive || break
   ball_pos = x if tile == 4
   paddle_pos = x if tile == 3
   if x == -1 && y == 0
