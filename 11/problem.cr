@@ -38,8 +38,7 @@ class Robot
   def run
     loop {
       @ic.send(get(@p))
-      @grid[@p] = @ic.run || break
-      o2 = @ic.run || break
+      @grid[@p], o2 = @ic.collect_safe(2) || break
       case o2
       when 0 then @direc = (@direc - 1) % 4
       when 1 then @direc = (@direc + 1) % 4
