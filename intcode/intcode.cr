@@ -1,8 +1,8 @@
 class IC
-  property t
+  property t, outp
   @t : Hash(Int64, Int64)
 
-  def initialize(tape : (Array(Int32) | Array(Int64) | String))
+  def initialize(tape : (Array(Int32) | Array(Int64) | String), clear_input : Bool = true)
     @t = case tape
          when Array(Int64) then tape.map_with_index { |x, i| {i.to_i64, x} }.to_h
          when Array(Int32) then tape.map_with_index { |x, i| {i.to_i64, x.to_i64} }.to_h
@@ -11,6 +11,8 @@ class IC
          end
     @p = 0_i64
     @rb = 0_i64
+    @inp = Deque(Int64).new
+    @clear_input = clear_input
   end
 
   def get(idx : Int64)
@@ -26,15 +28,7 @@ class IC
     end
   end
 
-  def run(input : (Array(Int64) | Int64 | Int32 | Array(Int32) | Nil) = [] of Int64)
-    i = case input
-        when Array(Int64) then input
-        when Array(Int32) then input.map(&.to_i64)
-        when Int64        then [input]
-        when Int32        then [input.to_i64]
-        when nil          then [] of Int64
-        else                   raise "Unexpected input"
-        end
+  def run
     loop {
       cur = @t[@p]
       op = cur % 100
@@ -46,8 +40,8 @@ class IC
       case op
       when  1 then @t[zi] = x + y; @p += 4
       when  2 then @t[zi] = x * y; @p += 4
-      when  3 then @t[xi] = i.pop; @p += 2
-      when  4 then @p += 2; return x
+      when  3 then @t[xi] = @inp.shift; @p += 2
+      when  4 then @p += 2; @inp.clear if @clear_input; return x
       when  5 then @p = x != 0 ? y : @p + 3
       when  6 then @p = x == 0 ? y : @p + 3
       when  7 then @t[zi] = x < y ? 1_i64 : 0_i64; @p += 4
@@ -59,8 +53,51 @@ class IC
     }
   end
 
-  def self.run(t, input = nil)
-    ic = IC.new t
-    ic.run input
+  def send(input : (Array(Int64) | Int64 | Int32 | Array(Int32) | Nil) = [] of Int64)
+    v = case input
+        when Array(Int64) then input
+        when Array(Int32) then input.map(&.to_i64)
+        when Int64        then [input]
+        when Int32        then [input.to_i64]
+        when nil          then [] of Int64
+        else                   raise "Unexpected input"
+        end
+    @inp.concat(v)
+  end
+
+  def collect
+    outp = [] of Int64
+    loop {
+      outp << (run || break)
+    }
+    outp
+  end
+
+  def collect(count : Int32)
+    outp = [] of (Int64 | Nil)
+    count.times {
+      v = run
+      if v == nil
+        outp << nil
+        break
+      else
+        outp << v
+      end
+    }
+    outp
+  end
+
+  def collect_safe(count : Int32)
+    outp = [] of Int64
+    count.times {
+      outp << (run || return nil)
+    }
+    outp
+  end
+
+  def self.run(tape, input = nil)
+    ic = IC.new tape, false
+    ic.send(input)
+    ic.collect
   end
 end

@@ -8,9 +8,10 @@ tape = input[0]
 puts (0..4).to_a.permutations.max_of { |perm|
   prev = 0
   perm.each { |setting|
-    input = [prev.to_i32, setting]
+    input = [setting, prev.to_i32]
     ic = IC.new tape
-    prev = ic.run(input) || break
+    ic.send(input)
+    prev = ic.run || break
   }
   prev
 }
@@ -22,9 +23,11 @@ puts (5..9).to_a.permutations.max_of { |perm|
   loop {
     res = prev
     perm.each { |setting|
-      input = map.has_key?(setting) ? [prev.to_i32] : [prev.to_i32, setting]
+      input = map.has_key?(setting) ? [prev.to_i32] : [setting, prev.to_i32]
       map[setting] ||= IC.new tape
-      prev = map[setting].run input
+      ic = map[setting]
+      ic.send(input)
+      prev = ic.run
       break if !prev
     }
     break res if !prev
