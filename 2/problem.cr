@@ -6,7 +6,7 @@ base_tape = input[0].split(',').map &.to_i
 
 # part 1
 tape = base_tape.clone
-tape[1..2] = [12, 2]
+tape[1], tape[2] = [12, 2]
 ic = IC.new tape
 ic.run
 puts ic.t[0]

@@ -1,4 +1,4 @@
-for i in {1..13}
+for i in {1..15}
 do
     cd $i
     crystal problem.cr > /dev/null 2>&1

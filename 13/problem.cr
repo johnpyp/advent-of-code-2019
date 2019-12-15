@@ -42,17 +42,17 @@ ic2 = IC.new input2
 ball_pos = 0
 paddle_pos = 0
 loop {
-  jpos = case
-         when ball_pos > paddle_pos  then 1
-         when ball_pos < paddle_pos  then -1
-         when ball_pos == paddle_pos then 0
-         else                             raise "Unexpected"
-         end
-  ic2.send jpos
+  joystick_tilt = case
+                  when ball_pos > paddle_pos  then 1
+                  when ball_pos < paddle_pos  then -1
+                  when ball_pos == paddle_pos then 0
+                  else                             raise "Unexpected"
+                  end
+  ic2.send joystick_tilt
   x, y, tile = ic2.collect_safe(3) || break
   ball_pos = x if tile == 4
   paddle_pos = x if tile == 3
-  if x == -1 && y == 0
+  if {x, y} == {-1, 0}
     puts "score #{tile}"
   else
     puts "x #{x}, y #{y}, tile #{tile}"
