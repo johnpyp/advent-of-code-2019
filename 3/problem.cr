@@ -8,7 +8,6 @@ record Point, x : Int32 = 0, y : Int32 = 0 {
     Point.new x + other.x, y + other.y
   end
 }
-
 def parse_line(s)
   points = [] of Point
   pos = Point.new
