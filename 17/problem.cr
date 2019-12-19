@@ -19,29 +19,6 @@ record Point, x : Int32 = 0, y : Int32 = 0 {
     Point.new x - other.x, y - other.y
   end
 }
-ascii_map = {
-   35 => '#',
-   46 => '.',
-   10 => '\n',
-   79 => 'O',
-   60 => '<',
-   62 => '>',
-  118 => 'v',
-   94 => '^',
-   88 => 'X',
-   44 => ',',
-   65 => 'A',
-}
-
-def ascii_to_num(ascii)
-  hm = {
-    ','  => 44,
-    '\n' => 10,
-    'A'  => 65,
-
-  }
-  hm[num]? || 0
-end
 
 def surrounding(point)
   [
@@ -52,12 +29,13 @@ def surrounding(point)
   ]
 end
 
-def run1(input, ascii_map)
+def run1(input)
   ic = IC.new input
   outp = ic.collect
   x = 0
   y = 0
-  hm = outp.map { |n| ascii_map[n]? || '?' }.each_with_object({} of Point => Char) { |c, obj|
+  hm = outp.each_with_object({} of Point => Char) { |n, obj|
+    c = n.chr
     if c == '\n'
       y += 1
       x = 0
@@ -77,15 +55,14 @@ def run1(input, ascii_map)
     v
   }
   intersect_points.map { |point|
-    puts point
-    point.x * (point.y)
+    point.x * point.y
   }.sum
 end
 
-def run2(input, ascii_map)
+def run2(input)
   input = "2" + input[1..]
 end
 
 input = File.read("input.txt").strip
-puts run1(input, ascii_map)
-# puts run2(input, ascii_map)
+puts run1(input)
+# puts run2(input)
